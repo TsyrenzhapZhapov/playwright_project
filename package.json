@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "task1": "node task1.js",
+    "task2": "node task2.js",
+    "task3": "node task3.js",
+    "task4": "node task4.js",
+    "task5": "node task5.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/TsyrenzhapZhapov/playwright_project.git"
