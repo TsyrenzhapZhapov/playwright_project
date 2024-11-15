@@ -1,5 +1,3 @@
-
-
 export class Alerts {
 
     constructor(page) {
@@ -11,7 +9,7 @@ export class Alerts {
     }
 
     async goto() {
-        await this.page.goto('https://the-internet.herokuapp.com/javascript_alerts');
+        await this.page.goto(process.env.BASE_URL + '/javascript_alerts');
     }
 
     async buttonAlert() {

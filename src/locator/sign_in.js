@@ -1,6 +1,4 @@
-
-
-export class signIn {
+export class SignIn {
 
     constructor(page) {
         this.page = page;
@@ -12,7 +10,7 @@ export class signIn {
     }
 
     async goto() {
-        await this.page.goto('https://the-internet.herokuapp.com/login');
+        await this.page.goto(`${process.env.BASE_URL}/login`);
     }
 
     async login(username, password) {
@@ -24,5 +22,4 @@ export class signIn {
     async logout() {
         await this.logoutButton.click();
     }
-
 }
