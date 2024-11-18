@@ -4,22 +4,23 @@ import { faker } from '@faker-js/faker';
 
 test.describe.serial('Go rest', () => {
     const randomEmail = faker.internet.email();
+    const randomGender = faker.person.sex();
+    const randomName = randomGender === 'male' ? faker.person.fullName('male') : faker.person.fullName('female');
+    
     let userId;
 
-    test.only('Get users', async ({ request }) => {
+    test('Get users', async ({ request }) => {
         const response = await request.get(process.env.REST_URL, {
+            params: {},
             headers: {
                 'Authorization': `Bearer ${process.env.TOKEN}`
-            },
-            params: {}
+            }
         });
         const data = await response.json();
-        const filterData = data.map(function(user) {
-            return {
-                name: user.name,
-                status: user.status
-            };
-        });
+        const filterData = data.map(user => ({
+            name: user.name,
+            status: user.status
+        }));
         expect(response.status()).toEqual(200);
         expect(response.statusText()).toEqual('OK');
         console.log(filterData);
@@ -27,14 +28,14 @@ test.describe.serial('Go rest', () => {
 
     test('create user',async ({ request }) => {
         const response = await request.post(process.env.REST_URL, {
-            data: {
-                'name': 'Tom Smith',
-                'gender': 'male',
-                'email': randomEmail,
-                'status': 'active'
-            },
             headers: {
                 'Authorization': `Bearer ${process.env.TOKEN}`
+            },
+            data: {
+                'name': randomName,
+                'gender': randomGender,
+                'email': randomEmail,
+                'status': 'active'
             }
         });
         const data = await response.json();
@@ -51,12 +52,12 @@ test.describe.serial('Go rest', () => {
         console.log('User ID before update test:', userId);
         expect(userId).toBeDefined();
         const response = await request.patch(`${process.env.REST_URL}/${userId}`, {
-            data: {
-                'name': 'Tom Tom(patch)',
-                'gender': 'male'
-            },
             headers: {
                 'Authorization': `Bearer ${process.env.TOKEN}`
+            },
+            data: {
+                'name': randomName,
+                'gender': randomGender
             }
         });
         const data = await response.json();
@@ -68,14 +69,14 @@ test.describe.serial('Go rest', () => {
     test('Update user(put) by id', async ({ request }) => {
         expect(userId).toBeDefined();
         const response = await request.put(`${process.env.REST_URL}/${userId}`, {
-            data: {
-                'name': 'Tom Smith(put)',
-                'gender': 'male',
-                'email': 'tomput@test.test',
-                'status': 'active'
-            },
             headers: {
                 'Authorization': `Bearer ${process.env.TOKEN}`
+            },
+            data: {
+                'name': randomName,
+                'gender': randomGender,
+                'email': randomEmail,
+                'status': 'active'
             }
         });
         const data = await response.json();
