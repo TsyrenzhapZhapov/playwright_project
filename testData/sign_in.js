@@ -1,6 +1,7 @@
 
+
 export const signInData = {
     username: 'tomsmith',
     password: 'SuperSecretPassword!',
-    incorrectUsername: 'TOMSMITH'
+    incorrectUsername: 'username'
 }

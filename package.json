@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    
+    "signin": "npx playwright test sign_in.spec.js --project=chromium --headed",
+    "alerts": "npx playwright test alerts.spec.js --project=chromium --headed",
+    "download": "npx playwright test download.spec.js --project=chromium --headed",
+    "upload": "npx playwright test upload.spec.js --project=chromium --headed",
+    "api": "npx playwright test api.spec.js --project=chromium"
   },
   "repository": {
     "type": "git",
@@ -20,5 +24,9 @@
   "devDependencies": {
     "@playwright/test": "^1.47.2",
     "@types/node": "^22.7.4"
+  },
+  "dependencies": {
+    "@faker-js/faker": "^9.2.0",
+    "dotenv": "^16.4.5"
   }
 }
