@@ -8,7 +8,8 @@
     "alerts": "npx playwright test alerts.spec.js --project=chromium --headed",
     "download": "npx playwright test download.spec.js --project=chromium --headed",
     "upload": "npx playwright test upload.spec.js --project=chromium --headed",
-    "api": "npx playwright test api.spec.js --project=chromium"
+    "api": "npx playwright test api.spec.js --project=chromium",
+    "allure": "allure generate allure-results --clean -o allure-report && allure open allure-report"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,8 @@
   "homepage": "https://github.com/TsyrenzhapZhapov/playwright_project#readme",
   "devDependencies": {
     "@playwright/test": "^1.47.2",
-    "@types/node": "^22.7.4"
+    "@types/node": "^22.7.4",
+    "allure-playwright": "^3.0.6"
   },
   "dependencies": {
     "@faker-js/faker": "^9.2.0",
