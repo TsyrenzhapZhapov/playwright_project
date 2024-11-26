@@ -6,14 +6,14 @@ test.describe.serial('Go rest', () => {
     const randomEmail = faker.internet.email();
     const randomGender = faker.person.sex();
     const randomName = randomGender === 'male' ? faker.person.fullName('male') : faker.person.fullName('female');
-    const token = { 'Authorization': `Bearer ${process.env.TOKEN}`};
+    const goRestHeaders = { 'Authorization': `Bearer ${process.env.TOKEN}`};
    
     let userId;
 
     test('should get users list', async ({ request }) => {
         const response = await request.get(process.env.REST_URL, {
             params: {},
-            headers: token
+            headers: goRestHeaders
         });
         const data = await response.json();
         const filterData = data.map(user => ({
@@ -27,7 +27,7 @@ test.describe.serial('Go rest', () => {
 
     test('create user',async ({ request }) => {
         const response = await request.post(process.env.REST_URL, {
-            headers: token,
+            headers: goRestHeaders,
             data: {
                 'name': randomName,
                 'gender': randomGender,
@@ -44,10 +44,10 @@ test.describe.serial('Go rest', () => {
         userId = data.id;
     });
 
-    test('update user with PATCH by id', async ({ request }) => {
+    test('update(patch) user by id', async ({ request }) => {
         expect(userId).toBeDefined();
         const response = await request.patch(`${process.env.REST_URL}/${userId}`, {
-            headers: token,
+            headers: goRestHeaders,
             data: {
                 'name': randomName,
                 'gender': randomGender
@@ -59,10 +59,10 @@ test.describe.serial('Go rest', () => {
 
     });
 
-    test('update user with PUT by id', async ({ request }) => {
+    test('update(put) user by id', async ({ request }) => {
         expect(userId).toBeDefined();
         const response = await request.put(`${process.env.REST_URL}/${userId}`, {
-            headers: token,
+            headers: goRestHeaders,
             data: {
                 'name': randomName,
                 'gender': randomGender,
@@ -79,15 +79,15 @@ test.describe.serial('Go rest', () => {
     test('the created user must be deleted', async ({ request }) => {
         expect(userId).toBeDefined();
         const response = await request.delete(`${process.env.REST_URL}/${userId}`, {
-            headers: token,
+            headers: goRestHeaders,
         });
         expect(response.status()).toEqual(204);
         expect(response.statusText()).toEqual('No Content');
     });
 
-    test('trying to get the remote user', async({ request }) => {
+    test('validate the removed user is unexisted', async({ request }) => {
         const response = await request.get(`${process.env.REST_URL}/${userId}`, {
-            headers: token
+            headers: goRestHeaders
         });
         expect(response.status()).toEqual(404);
         expect(response.statusText()).toEqual('Not Found');
