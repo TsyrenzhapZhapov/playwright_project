@@ -6,15 +6,14 @@ test.describe.serial('Go rest', () => {
     const randomEmail = faker.internet.email();
     const randomGender = faker.person.sex();
     const randomName = randomGender === 'male' ? faker.person.fullName('male') : faker.person.fullName('female');
-    
+    const goRestHeaders = { 'Authorization': `Bearer ${process.env.TOKEN}`};
+   
     let userId;
 
-    test('Get users', async ({ request }) => {
+    test('should get users list', async ({ request }) => {
         const response = await request.get(process.env.REST_URL, {
             params: {},
-            headers: {
-                'Authorization': `Bearer ${process.env.TOKEN}`
-            }
+            headers: goRestHeaders
         });
         const data = await response.json();
         const filterData = data.map(user => ({
@@ -23,14 +22,12 @@ test.describe.serial('Go rest', () => {
         }));
         expect(response.status()).toEqual(200);
         expect(response.statusText()).toEqual('OK');
-        console.log(filterData);
+
     });
 
     test('create user',async ({ request }) => {
         const response = await request.post(process.env.REST_URL, {
-            headers: {
-                'Authorization': `Bearer ${process.env.TOKEN}`
-            },
+            headers: goRestHeaders,
             data: {
                 'name': randomName,
                 'gender': randomGender,
@@ -43,18 +40,14 @@ test.describe.serial('Go rest', () => {
         expect(response.statusText()).toEqual('Created');
         expect(data).toHaveProperty('id');
         expect(data.email).toEqual(randomEmail);
-        console.log(data);
 
         userId = data.id;
     });
 
-    test('Update user(patch) by id', async ({ request }) => {
-        console.log('User ID before update test:', userId);
+    test('update(patch) user by id', async ({ request }) => {
         expect(userId).toBeDefined();
         const response = await request.patch(`${process.env.REST_URL}/${userId}`, {
-            headers: {
-                'Authorization': `Bearer ${process.env.TOKEN}`
-            },
+            headers: goRestHeaders,
             data: {
                 'name': randomName,
                 'gender': randomGender
@@ -63,15 +56,13 @@ test.describe.serial('Go rest', () => {
         const data = await response.json();
         expect(response.status()).toEqual(200);
         expect(response.statusText()).toEqual('OK');
-        console.log(data);
+
     });
 
-    test('Update user(put) by id', async ({ request }) => {
+    test('update(put) user by id', async ({ request }) => {
         expect(userId).toBeDefined();
         const response = await request.put(`${process.env.REST_URL}/${userId}`, {
-            headers: {
-                'Authorization': `Bearer ${process.env.TOKEN}`
-            },
+            headers: goRestHeaders,
             data: {
                 'name': randomName,
                 'gender': randomGender,
@@ -82,25 +73,21 @@ test.describe.serial('Go rest', () => {
         const data = await response.json();
         expect(response.status()).toEqual(200);
         expect(response.statusText()).toEqual('OK');
-        console.log(data);
+
     });
 
-    test('delete user by id', async ({ request }) => {
+    test('the created user must be deleted', async ({ request }) => {
         expect(userId).toBeDefined();
         const response = await request.delete(`${process.env.REST_URL}/${userId}`, {
-            headers: {
-                'Authorization': `Bearer ${process.env.TOKEN}`,
-            },
+            headers: goRestHeaders,
         });
         expect(response.status()).toEqual(204);
         expect(response.statusText()).toEqual('No Content');
     });
 
-    test('get user by id', async({ request }) => {
+    test('validate the removed user is unexisted', async({ request }) => {
         const response = await request.get(`${process.env.REST_URL}/${userId}`, {
-            headers: {
-                'Authorization': `Bearer ${process.env.TOKEN}`,
-            },
+            headers: goRestHeaders
         });
         expect(response.status()).toEqual(404);
         expect(response.statusText()).toEqual('Not Found');
